@@ -1,21 +1,21 @@
 import { describe, expect, test } from 'vitest';
 
-import { analysisRunGVKRequest, analysisRunGVKRun, isAnalysisRunRequest } from './analysis-run-gvk';
+import { analysisRunGVKRun, isAnalysisRun } from './analysis-run-gvk';
 
-describe('isAnalysisRunRequest', () => {
-  test('returns true for an AnalysisRunRequest gvk', () => {
-    expect(isAnalysisRunRequest(analysisRunGVKRequest)).toBe(true);
+describe('isAnalysisRun', () => {
+  test('returns false for an EE extension run gvk', () => {
+    expect(isAnalysisRun('kargo.akuity.io/v1alpha1, Kind=AnalysisRunRequest')).toBe(false);
   });
 
-  test('returns false for a Rollouts AnalysisRun gvk', () => {
-    expect(isAnalysisRunRequest(analysisRunGVKRun)).toBe(false);
+  test('returns true for a Rollouts AnalysisRun gvk', () => {
+    expect(isAnalysisRun(analysisRunGVKRun)).toBe(true);
   });
 
-  test('returns false for a legacy (empty) gvk', () => {
-    expect(isAnalysisRunRequest('')).toBe(false);
+  test('returns true for a legacy (empty) gvk', () => {
+    expect(isAnalysisRun('')).toBe(true);
   });
 
-  test('returns false when gvk is undefined', () => {
-    expect(isAnalysisRunRequest(undefined)).toBe(false);
+  test('returns true when gvk is undefined', () => {
+    expect(isAnalysisRun(undefined)).toBe(true);
   });
 });

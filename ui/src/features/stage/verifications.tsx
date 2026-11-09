@@ -16,7 +16,7 @@ import { AnalysisModal } from '../common/analysis-modal/analysis-modal';
 import { useModal } from '../common/modal/use-modal';
 
 import { useGetFreightMap } from './tabs/freight-history/use-get-freight-map';
-import { isAnalysisRunRequest } from './utils/analysis-run-gvk';
+import { isAnalysisRun } from './utils/analysis-run-gvk';
 import { verificationPhaseIsTerminal } from './utils/verification-phase';
 import { VerificationIcon } from './verification-icon';
 
@@ -29,7 +29,7 @@ export const Verifications = ({ verifications, images }: Props) => {
   const { show } = useModal();
   const { name: projectName } = useParams();
   const freightMap = useGetFreightMap(projectName || '');
-  const { analysisRunRequestExtension } = useExtensionsContext();
+  const { analysisRunExtension } = useExtensionsContext();
 
   const [showImplicitVerifications, setShowImplicitVerifications] = useState(false);
 
@@ -121,7 +121,7 @@ export const Verifications = ({ verifications, images }: Props) => {
           render={(val, verification) => {
             const analysisName = val.analysisRun?.name || '';
 
-            if (!isAnalysisRunRequest(val.analysisRun?.gvk)) {
+            if (!isAnalysisRun(val.analysisRun?.gvk)) {
               return (
                 <Link
                   onClick={() =>
@@ -135,17 +135,17 @@ export const Verifications = ({ verifications, images }: Props) => {
               );
             }
 
-            if (!analysisRunRequestExtension) {
+            if (!analysisRunExtension) {
               return verification.analysisRun?.name;
             }
 
-            const AnalysisRunRequestModal = analysisRunRequestExtension.component;
+            const AnalysisRunModal = analysisRunExtension.component;
 
             return (
               <Link
                 onClick={() =>
                   show((p) => (
-                    <AnalysisRunRequestModal {...p} analysisName={analysisName} images={images} />
+                    <AnalysisRunModal {...p} analysisName={analysisName} images={images} />
                   ))
                 }
               >

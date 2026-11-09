@@ -107,16 +107,16 @@ export type PromotionStepExtension = {
   };
 };
 
-export type AnalysisRunRequestComponentProps = {
+export type AnalysisRunComponentProps = {
   analysisName: string;
   images: string[];
   visible: boolean;
   hide: () => void;
 };
 
-export type AnalysisRunRequestExtension = {
-  type: 'analysisRunRequest';
-  component: (props: AnalysisRunRequestComponentProps) => React.ReactNode;
+export type AnalysisRunExtension = {
+  type: 'analysisRun';
+  component: (props: AnalysisRunComponentProps) => React.ReactNode;
 };
 
 export type Extension =
@@ -130,4 +130,4 @@ export type Extension =
   | ProjectSettingsExtension
   | ArgoCDExtension
   | PromotionStepExtension
-  | AnalysisRunRequestExtension;
+  | AnalysisRunExtension;

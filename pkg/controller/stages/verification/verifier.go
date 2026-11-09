@@ -24,6 +24,7 @@ type Verifier struct {
 	client                     client.Client
 	eventSender                kargoEvent.Sender
 	analysisRunners            map[kargoapi.AnalysisRunGVK]AnalysisRunner
+	selectRunnerForCreateFn    func(kargoapi.Stage, map[kargoapi.AnalysisRunGVK]AnalysisRunner) (AnalysisRunner, bool)
 }
 
 func NewVerifier(
@@ -32,13 +33,18 @@ func NewVerifier(
 	cl client.Client,
 	eventSender kargoEvent.Sender,
 	analysisRunners map[kargoapi.AnalysisRunGVK]AnalysisRunner,
+	selectRunnerForCreateFn func(kargoapi.Stage, map[kargoapi.AnalysisRunGVK]AnalysisRunner) (AnalysisRunner, bool),
 ) Verifier {
+	if selectRunnerForCreateFn == nil {
+		selectRunnerForCreateFn = selectRunnerForCreate
+	}
 	return Verifier{
 		controllerName:             controllerName,
 		rolloutsIntegrationEnabled: rolloutsIntegrationEnabled,
 		client:                     cl,
 		eventSender:                eventSender,
 		analysisRunners:            analysisRunners,
+		selectRunnerForCreateFn:    selectRunnerForCreateFn,
 	}
 }
 

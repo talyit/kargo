@@ -1127,6 +1127,7 @@ func (r *RegularStageReconciler) verifyStageFreight(
 		r.client,
 		r.eventSender,
 		analysisRunners,
+		nil,
 	)
 	return ver.VerifyStageFreight(ctx, stage, startTime, endTime)
 }

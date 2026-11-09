@@ -325,6 +325,11 @@ func TestVerifier_recordFreightVerificationEvent(t *testing.T) {
 			ver := Verifier{
 				client:      c,
 				eventSender: recorder,
+				analysisRunners: map[kargoapi.AnalysisRunGVK]AnalysisRunner{
+					kargoapi.AnalysisRunGVKRun: &analysisRunnerRollouts{
+						client: c,
+					},
+				},
 			}
 
 			ver.recordFreightVerificationEvent(tt.stage, tt.freightRef, tt.vi)
@@ -947,6 +952,7 @@ func TestVerifier_startVerification(t *testing.T) {
 						credentialsDB:                tt.credsDB,
 					},
 				},
+				selectRunnerForCreateFn: selectRunnerForCreate,
 			}
 
 			vi, err := ver.startVerification(t.Context(), tt.stage, tt.freightCol, tt.req, startTime, fixedEndTime)

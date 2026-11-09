@@ -40,14 +40,12 @@ type AnalysisRunner interface {
 
 func (ver Verifier) analysisRunnerFor(runRef kargoapi.AnalysisRunReference) (AnalysisRunner, error) {
 	var runnerGVK kargoapi.AnalysisRunGVK
-	switch runRef.GVK {
-	case kargoapi.AnalysisRunGVKRun, kargoapi.AnalysisRunGVKLegacy:
+	if runRef.GVK == "" {
 		runnerGVK = kargoapi.AnalysisRunGVKRun
-	case kargoapi.AnalysisRunGVKRequest:
-		runnerGVK = kargoapi.AnalysisRunGVKRequest
-	default:
-		return nil, fmt.Errorf("unsupported AnalysisRun GVK: %q", runRef.GVK)
+	} else {
+		runnerGVK = runRef.GVK
 	}
+
 	runner, ok := ver.analysisRunners[runnerGVK]
 	if !ok {
 		return nil, fmt.Errorf("verifier does not have analysis runner for %v", runnerGVK)
@@ -134,38 +132,17 @@ func (ver Verifier) createAnalysisRun(
 	freightCollection kargoapi.FreightCollection,
 	lastPromoName string,
 ) (*AnalysisRun, string, error) {
-	if stage.IsTargetAware() && stage.Spec.Targets.Verification != nil {
-		return ver.createFleetAnalysisRun(ctx, stage, freightCollection, lastPromoName)
-	}
-
-	runner, ok := ver.analysisRunners[kargoapi.AnalysisRunGVKRun]
+	runner, ok := ver.selectRunnerForCreateFn(stage, ver.analysisRunners)
 	if !ok {
-		return nil, "", fmt.Errorf("analysis runner not found for %v", kargoapi.AnalysisRunGVKRun)
+		return nil, "", fmt.Errorf("analysis runner not found for stage %q", stage.Name)
 	}
 	return runner.CreateAnalysisRun(ctx, stage, freightCollection, lastPromoName)
 }
 
-func (ver Verifier) createFleetAnalysisRun(
-	ctx context.Context,
-	stage kargoapi.Stage,
-	freightCollection kargoapi.FreightCollection,
-	lastPromoName string,
-) (*AnalysisRun, string, error) {
-	runMode := stage.Spec.Targets.Verification.VerificationRunMode
-	switch runMode {
-	case kargoapi.VerificationRunModePerStage, "":
-		runner, ok := ver.analysisRunners[kargoapi.AnalysisRunGVKRun]
-		if !ok {
-			return nil, "", fmt.Errorf("analysis runner not found for %v", kargoapi.AnalysisRunGVKRun)
-		}
-		return runner.CreateAnalysisRun(ctx, stage, freightCollection, lastPromoName)
-	case kargoapi.VerificationRunModePerTarget:
-		runner, ok := ver.analysisRunners[kargoapi.AnalysisRunGVKRequest]
-		if !ok {
-			return nil, "", fmt.Errorf("analysis runner not found for %v", kargoapi.AnalysisRunGVKRequest)
-		}
-		return runner.CreateAnalysisRun(ctx, stage, freightCollection, lastPromoName)
-	default:
-		return nil, "", fmt.Errorf("unknown verification runMode: %q", runMode)
-	}
+func selectRunnerForCreate(
+	_ kargoapi.Stage,
+	runners map[kargoapi.AnalysisRunGVK]AnalysisRunner,
+) (AnalysisRunner, bool) {
+	runner, ok := runners[kargoapi.AnalysisRunGVKRun]
+	return runner, ok
 }

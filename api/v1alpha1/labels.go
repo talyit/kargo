@@ -65,7 +65,6 @@ const (
 	// to replicated resources are needed.
 	LabelKeyReplicatedSHA = "kargo.akuity.io/replicated-sha"
 
-	// LabelKeyAnalysisRunTarget is a label key for AnalysisRun resources created
-	// per-target by AnalysisRunRequest
+	// LabelKeyAnalysisRunTarget is a label key for AnalysisRun resources created per-target
 	LabelKeyAnalysisRunTarget = "kargo.akuity.io/target"
 )

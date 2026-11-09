@@ -1059,7 +1059,6 @@ func (v *VerificationInfoStack) UpdateOrPush(info ...VerificationInfo) {
 type AnalysisRunGVK string
 
 const AnalysisRunGVKRun = "argoproj.io/v1alpha1, Kind=AnalysisRun"
-const AnalysisRunGVKRequest = "kargo.akuity.io/v1alpha1, Kind=AnalysisRunRequest"
 const AnalysisRunGVKLegacy = ""
 
 // AnalysisRunReference is a reference to an AnalysisRun.
@@ -1071,6 +1070,6 @@ type AnalysisRunReference struct {
 	// Phase is the last observed phase of the AnalysisRun referenced by Name.
 	Phase string `json:"phase"`
 	// Kind is a string representation of GroupVersionKind describing this run
-	// Options are AnalysisRunGVKRun and AnalysisRunGVKRequest
+	// For classic analysis run it is AnalysisRunGVKRun or AnalysisRunGVKLegacy (empty)
 	GVK AnalysisRunGVK `json:"gvk,omitempty"`
 }
