@@ -19,7 +19,7 @@ var _ MappedNullable = &AnalysisRunReference{}
 
 // AnalysisRunReference struct for AnalysisRunReference
 type AnalysisRunReference struct {
-	// Kind is a string representation of GroupVersionKind describing this run Options are AnalysisRunGVKRun and AnalysisRunGVKRequest
+	// Kind is a string representation of GroupVersionKind describing this run For classic analysis run it is AnalysisRunGVKRun or AnalysisRunGVKLegacy (empty)
 	Gvk *string `json:"gvk,omitempty"`
 	// Name is the name of the AnalysisRun.
 	Name *string `json:"name,omitempty"`

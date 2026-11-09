@@ -610,7 +610,7 @@ spec:
                             gvk:
                               description: |-
                                 Kind is a string representation of GroupVersionKind describing this run
-                                Options are AnalysisRunGVKRun and AnalysisRunGVKRequest
+                                For classic analysis run it is AnalysisRunGVKRun or AnalysisRunGVKLegacy (empty)
                               type: string
                             name:
                               description: Name is the name of the AnalysisRun.

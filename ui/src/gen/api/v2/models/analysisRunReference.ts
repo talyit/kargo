@@ -9,7 +9,7 @@
 export interface AnalysisRunReference {
   /**
    * Kind is a string representation of GroupVersionKind describing this run
-   * Options are AnalysisRunGVKRun and AnalysisRunGVKRequest
+   * For classic analysis run it is AnalysisRunGVKRun or AnalysisRunGVKLegacy (empty)
    */
   gvk?: string;
   /** Name is the name of the AnalysisRun. */

@@ -4892,7 +4892,6 @@ func TestMarkFreightVerifiedForStage(t *testing.T) {
 	}
 }
 
-
 func TestRegularStageReconciler_computeEffectiveAutoPromotionHolds(t *testing.T) {
 	scheme := runtime.NewScheme()
 	require.NoError(t, kargoapi.AddToScheme(scheme))

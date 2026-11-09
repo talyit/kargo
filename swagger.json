@@ -6844,7 +6844,7 @@
       "type": "object",
       "properties": {
         "gvk": {
-          "description": "Kind is a string representation of GroupVersionKind describing this run\nOptions are AnalysisRunGVKRun and AnalysisRunGVKRequest",
+          "description": "Kind is a string representation of GroupVersionKind describing this run\nFor classic analysis run it is AnalysisRunGVKRun or AnalysisRunGVKLegacy (empty)",
           "type": "string"
         },
         "name": {
